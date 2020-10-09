@@ -1,0 +1,14 @@
+{
+    "name": "pomodoro",
+    "version": "1.0.0",
+    "description": "Pomodoro application",
+    "main": "index.js",
+    "scripts": {
+        "start": "electron ."
+    },
+    "author": "Handra",
+    "license": "ISC",
+    "devDependencies": {
+        "electron": "^10.1.3"
+    }
+}

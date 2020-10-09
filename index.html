@@ -1,0 +1,123 @@
+<html>
+    <head>
+        <script type="text/javascript">
+            var lastDurationMinute = 25
+            var currentMinute = 25
+            var currentSecond = 1
+
+            var started = false
+
+            var timer = null
+
+            function playYoo() {
+                document.getElementById("yooSound").play()
+            }
+
+            function resetPomodoro() {
+                clearInterval(timer)
+
+                var startStopButton = document.getElementById("startStopButton")
+                startStopButton.innerText = "Start"
+
+                var timerLabel = document.getElementById("timerLabel")
+                switch(lastDurationMinute) {
+                    case 25:
+                        timerLabel.innerText = "25:00"
+                        currentMinute = 25
+                        currentSecond = 1
+                        break
+
+                    case 50:
+                        timerLabel.innerText = "50:00"
+                        currentMinute = 50
+                        currentSecond = 1
+                        break
+                }
+            }
+
+            function countdown() {
+                currentSecond --
+
+                if (currentSecond < 0) {
+                    currentSecond = 59
+                    currentMinute --
+                }
+
+                if (currentMinute == 0 && currentSecond == 0) {
+                    // Time is up. Reset the pomodoro.
+                    resetPomodoro()
+
+                    // Play audio
+                    playYoo()
+
+                    // Reset the status flag
+                    started = false
+
+                    return
+                }
+
+                var minuteString = currentMinute
+                if (currentMinute < 10)
+                    minuteString = "0" + currentMinute
+
+                var secondString = currentSecond
+                if (currentSecond < 10)
+                    secondString = "0" + currentSecond
+
+                var timerLabel = document.getElementById("timerLabel")
+                timerLabel.innerText = minuteString + ":" + secondString
+            }
+
+            function startStopPomodoro() {
+                if (started) {
+                    // Pomodoro is started. Let's stop it.
+                    resetPomodoro()
+                } else {
+                    var startStopButton = document.getElementById("startStopButton")
+                    
+                    // Let's start the pomodoro.
+                    startStopButton.innerText = "Stop"
+
+                    timer = setInterval(countdown, 1000)
+                }
+
+                started = !started
+            }
+
+            function adjustPomodoro() {
+                if (started) // Skip adjustment if timer is running
+                    return
+
+                var timerLabel = document.getElementById("timerLabel")
+
+                switch(lastDurationMinute) {
+                    case 25:
+                        timerLabel.innerText = "50:00"
+                        lastDurationMinute = 50
+                        break
+
+                    case 50:
+                        timerLabel.innerText = "25:00"
+                        lastDurationMinute = 25
+                        break
+                }
+
+                currentMinute = lastDurationMinute
+            }
+        </script>
+    </head>
+
+    <body>
+        <audio id="yooSound">
+            <source src="yohoo.ogg" />
+        </audio>
+        
+        <table style="background-color: aliceblue; border-color: bisque; border-style: solid; border-width: 5px;">
+            <tr>
+                <td style="padding: 5px;"><img id="tomatoImg" src="tomato.png" width="50" height="50" onclick="adjustPomodoro()" /></td>
+                <td style="padding: 5px;"><label id="timerLabel" style="font-size: 50px; font-family: Verdana, Geneva, Tahoma, sans-serif;">25:00</label></td>
+                <td style="padding: 5px;"><button type="button" id="startStopButton" style="width: 100px; height: 50px; font-family: Verdana, Geneva, Tahoma, sans-serif; font-weight: bold; font-size: 20px;" onclick="startStopPomodoro()">Start</button></td>
+            </tr>
+        </table>
+    </body>
+</html>
